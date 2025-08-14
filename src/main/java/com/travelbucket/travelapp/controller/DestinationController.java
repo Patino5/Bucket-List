@@ -21,20 +21,21 @@ public class DestinationController {
         this.destinationService = destinationService;
     }
 
+    // GET /api/destinations
     @GetMapping()
     public ResponseEntity<List<Destination>> getAll() {
         List<Destination> destinationList = destinationService.getAll();
         return ResponseEntity.ok(destinationList);
     }
 
-    // GET /api/destinations?userId=1
+    // GET /api/destinations/userId/{userID}
     @GetMapping("/user/{userID}")
     public ResponseEntity<List<Destination>> getAllForUser(@PathVariable("userID") int userId) {
         List<Destination> list = destinationService.getAllForUser(userId);
         return ResponseEntity.ok(list);
     }
 
-    // GET /api/destinations/{id}
+    // GET /api/destinations/{destinationID}
     @GetMapping("/{destinationID}")
     public ResponseEntity<Destination> getById(@PathVariable("destinationID") int destinationID) {
         Destination destination = destinationService.getById(destinationID);
@@ -48,7 +49,7 @@ public class DestinationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
-    // PUT /api/destinations/{id}
+    // PUT /api/destinations/{destinationID}
     @PutMapping("/{destinationID}")
     public ResponseEntity<Destination> update(@PathVariable("destinationID") int destinationID, @RequestBody Destination destination) {
         destination.setDestinationID(destinationID);
@@ -56,7 +57,7 @@ public class DestinationController {
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
-    // DELETE /api/destinations/{id}
+    // DELETE /api/destinations/{destinationID}
     @DeleteMapping("/{destinationID}")
     public ResponseEntity<Void> delete(@PathVariable("destinationID") int destinationID) {
         boolean removed = destinationService.delete(destinationID);
