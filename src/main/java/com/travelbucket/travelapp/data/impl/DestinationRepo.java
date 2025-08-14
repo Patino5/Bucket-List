@@ -49,31 +49,34 @@ public class DestinationRepo implements DestinationRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
+        int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, destination.getUserID());
             ps.setString(2, destination.getCity());
             ps.setString(3, destination.getCountry());
+
             if (destination.getHomeDeparture() != null) {
                 ps.setTimestamp(4, Timestamp.valueOf(destination.getHomeDeparture()));
             } else {
                 ps.setTimestamp(4, null);
             }
+
             if (destination.getDestinationDeparture() != null) {
                 ps.setTimestamp(5, Timestamp.valueOf(destination.getDestinationDeparture()));
             } else {
                 ps.setTimestamp(5, null);
             }
-            return ps;
 
+            return ps;
         }, keyHolder);
 
-        Number key = keyHolder.getKey();
-        if (key != null) {
-            destination.setDestinationID(key.intValue());
-            return destination;
+        if (rowsAffected <= 0) {
+            return null;
         }
-        return null;
+
+        destination.setDestinationID(keyHolder.getKey().intValue());
+
+        return destination;
     }
 
     @Override
