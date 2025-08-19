@@ -2,17 +2,16 @@ package com.travelbucket.travelapp.service;
 
 import com.travelbucket.travelapp.data.DestinationRepository;
 import com.travelbucket.travelapp.model.Destination;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class DestinationService {
-    private final DestinationRepository repository;
 
-    public DestinationService(DestinationRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired
+    private DestinationRepository repository;
 
     public List<Destination> getAllForUser(int userID) {
         return repository.findAllByUserId(userID);
