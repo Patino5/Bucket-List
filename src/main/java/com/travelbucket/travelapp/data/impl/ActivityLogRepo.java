@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Repository
 public class ActivityLogRepo implements ActivityLogRepository {
 
     @Autowired
@@ -23,13 +25,13 @@ public class ActivityLogRepo implements ActivityLogRepository {
     ActivityLogRowMapper activityLogRowMapper;
 
     @Override
-    public List<ActivityLog> findAll() {
+    public List<ActivityLog> getAll() {
         String sql = "SELECT * FROM ActivityLog";
         return jdbcTemplate.query(sql, activityLogRowMapper);
     }
 
     @Override
-    public ActivityLog findById(int memoryID) {
+    public ActivityLog getById(int memoryID) {
         String sql = "SELECT * FROM ActivityLog Where memoryID = ?;";
         return jdbcTemplate.queryForObject(sql, activityLogRowMapper, memoryID);
     }

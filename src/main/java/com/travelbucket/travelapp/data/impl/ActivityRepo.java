@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.util.List;
 
+@Repository
 public class ActivityRepo implements ActivityRepository {
 
     @Autowired
@@ -31,6 +33,13 @@ public class ActivityRepo implements ActivityRepository {
         String sql = "SELECT * FROM Activity WHERE activityID = ?;";
 
         return jdbcTemplate.queryForObject(sql, activityRowMaper, activityID);
+    }
+
+    @Override
+    public List<Activity> getAllByDestinationId(int destinationID) {
+        String sql = "SELECT * FROM Activity WHERE destinationID = ?;";
+
+        return jdbcTemplate.query(sql, activityRowMaper, destinationID);
     }
 
     @Override

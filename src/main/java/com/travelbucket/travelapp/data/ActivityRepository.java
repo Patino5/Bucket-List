@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ActivityRepository {
     public List<Activity> getAll();
+    public List<Activity> getAllByDestinationId(int destinationID);
     public Activity getById(int activityID);
     public Activity add(Activity activity);
     public Activity update(Activity activity);
