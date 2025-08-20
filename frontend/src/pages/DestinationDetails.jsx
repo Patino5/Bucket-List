@@ -91,18 +91,18 @@ const DestinationDetails = ({ destinations, setDestinations }) => {
                             ? new Date(destination.destinationDeparture).toLocaleString()
                             : "N/A"}
                     </p>
-                    <div className="mt-5 flex gap-3">
+                    <div className="mt-5 flex gap-4">
                         <button
                             onClick={handleEditDestination}
                             className="bg-sky-500 hover:bg-sky-700 py-2 px-3 rounded-full"
                         >
-                            Edit destination
+                            Edit Destination
                         </button>
                         <button
                             onClick={() => setShowDeleteDestModal(true)}
                             className="bg-red-600 hover:bg-red-800 py-2 px-3 rounded-full"
                         >
-                            Delete destination
+                            Delete Destination
                         </button>
                         <button
                             onClick={handleAddActivity}
