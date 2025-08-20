@@ -11,6 +11,7 @@ import DestinationDetails from './pages/DestinationDetails';
 import EditDestination from './pages/EditDestination';
 import AddActivity from './pages/AddActivity';
 import EditActivity from './pages/EditActivity';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 function App() {
   const [destinations, setDestinations] = useState([]);
@@ -21,13 +22,13 @@ function App() {
         <Route path="/" element={<Splash />} />
         <Route path="/layout" element={<Layout />} >
           <Route path="/layout/login" element={<Login />} />
-          <Route path="/layout/home" element={<Home destinations={destinations} setDestinations={setDestinations} />} />
-          <Route path="/layout/home/destination/:id" element={<DestinationDetails destinations={destinations} setDestinations={setDestinations} />} />
-          <Route path="/layout/home/destination/:id/edit" element={<EditDestination destinations={destinations} setDestinations={setDestinations} />} />
-          <Route path="/layout/home/destination/:id/add-activity" element={<AddActivity />} />
+          <Route path="/layout/home" element={<ProtectedRoute><Home destinations={destinations} setDestinations={setDestinations} /></ProtectedRoute>} />
+          <Route path="/layout/home/destination/:id" element={<ProtectedRoute><DestinationDetails destinations={destinations} setDestinations={setDestinations} /></ProtectedRoute>} />
+          <Route path="/layout/home/destination/:id/edit" element={<ProtectedRoute><EditDestination destinations={destinations} setDestinations={setDestinations} /></ProtectedRoute>} />
+          <Route path="/layout/home/destination/:id/add-activity" element={<ProtectedRoute><AddActivity /></ProtectedRoute>} />
           <Route path="/layout/home/destination/:id/activity/:activityID/edit" element={<EditActivity />} />
-          <Route path="/layout/destinations" element={<Destination />} />
-          <Route path="/layout/activitylog" element={<ActivityLog />} />
+          <Route path="/layout/destinations" element={<ProtectedRoute><Destination /></ProtectedRoute>} />
+          <Route path="/layout/activitylog" element={<ProtectedRoute><ActivityLog /></ProtectedRoute>} />
           <Route path="/layout/*" element={<NoPage />} />
         </Route>
       </Routes>
