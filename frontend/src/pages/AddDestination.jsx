@@ -1,124 +1,150 @@
-import { useState } from "react"
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { addDestination } from './api';
 
-const AddDestination = () => {
-    const [destination, setDestination] = useState({
-        city: "",
-        country: "",
-        homeDepartureDate: "",
-        homeDepartureTime: "",
-        destinationDepartureDate: "",
-        destinationDepartureTime: ""
-    });
+// Helper: format datetime-local → ISO string for API
+const formatDateTimeForAPI = (dateTimeLocalValue) => {
+  if (!dateTimeLocalValue) return null;
+  return new Date(dateTimeLocalValue).toISOString();
+};
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDestination((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
+const AddDestination = ({ setDestinations }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    city: "",
+    country: "",
+    homeDeparture: "",
+    destinationDeparture: "",
+  })
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+        ...prev,
+        [name]: value
+    }));
+  };
 
-        try {
-            const response = await fetch("http://localhost:8080/api/destinations", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({...destination, userID: localStorage.getItem("userID")}),
-            });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-            if (!response.ok) {
-                throw new Error("Failed to add destination");
-            }
+    try {
+      const newDestination = {
+        userID: localStorage.getItem("userID"),
+        city: formData.city.trim(),
+        country: formData.country.trim(),
+        homeDeparture: formatDateTimeForAPI(formData.homeDeparture),
+        destinationDeparture: formatDateTimeForAPI(formData.destinationDeparture),
+        imageUrl: "" // optional placeholder if your backend expects it
+      };
 
-            const data = await response.json();
-            console.log("Destination added:", data);
+      const saved = await addDestination(newDestination);
+      console.log("Destination added:", saved);
 
-            // Reset form after successful save
-            setDestination({
-                city: "",
-                country: "",
-                HomeDepartureDate: "",
-                HomeDepartureTime: "",
-                DestinationDepartureDate: "",
-                DestinationDepartureTime: ""
-            });
+      // Update parent state if provided
+      if (setDestinations) {
+        setDestinations((prev) => [...prev, saved]);
+      }
 
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
+      navigate(`/layout/home`);
+    } catch (err) {
+      console.error("Add error:", err);
+      alert("Error adding destination: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const handleCancel = () => {
+    navigate("/layout/home");
+  };
 
-    return (
-        <div className="p-5 ">
-            <h1 className="text-4xl">Add Destination Page</h1>
-            <div className="p-10 border-1 m-10 rounded-4xl">
-                <form onSubmit={handleSubmit} className="flex flex-col">
-                    <input
-                        type="text"
-                        name="city"
-                        placeholder="City"
-                        className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={destination.city}
-                        onChange={handleChange}
+  return (
+    <div className="p-6 max-w-md mx-auto">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold mb-2">Add Destination</h2>
+        <p className="text-gray-600">Fill out destination details.</p>
+      </div>
 
-                    />
-                    <input
-                        type="text"
-                        name='country'
-                        placeholder="Country"
-                        className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={destination.country}
-                        onChange={handleChange}
-                    />
-
-                    <label htmlFor="destinationDeparture">Destination Departure:
-                        <input
-                            type="date"
-                            name="destinationDepartureDate"
-                            className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={destination.destinationDepartureDate}
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="time"
-                            name="destinationDepartureTime"
-                            className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={destination.destinationDepartureTime}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <label htmlFor="homeDepartureDate">Home Depature:
-                        <input
-                            type="date"
-                            name="homeDepartureDate"
-                            className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={destination.homeDepartureDate}
-                            onChange={handleChange}
-                        />
-                        <input
-                            type="time"
-                            name="homeDepartureTime"
-                            className="border border-gray-300 rounded p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            value={destination.homeDepartureTime}
-                            onChange={handleChange}
-                        />
-                    </label>
-                    <button
-                        type="submit"
-                        className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 hover:cursor-pointer transition"
-                    >
-                        Add Destination
-                    </button>
-                </form>
-            </div>
-
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-sm font-medium mb-2">City</label>
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            className="border border-gray-300 p-3 w-full rounded-md focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            required
+          />
         </div>
-    )
-}
+
+        <div>
+          <label className="block text-sm font-medium mb-2">Country</label>
+          <input
+            type="text"
+            name="country"
+            value={formData.country}
+            onChange={handleChange}
+            className="border border-gray-300 p-3 w-full rounded-md focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Home Departure Date & Time
+          </label>
+          <input
+            type="datetime-local"
+            name="homeDeparture"
+            value={formData.homeDeparture}
+            onChange={handleChange}
+            className="border border-gray-300 p-3 w-full rounded-md focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            When you depart from home
+          </p>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium mb-2">
+            Destination Departure Date & Time
+          </label>
+          <input
+            type="datetime-local"
+            name="destinationDeparture"
+            value={formData.destinationDeparture}
+            onChange={handleChange}
+            className="border border-gray-300 p-3 w-full rounded-md focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            When you depart from your destination
+          </p>
+        </div>
+
+        <div className="flex gap-3 pt-4">
+          <button
+            type="submit"
+            disabled={loading}
+            className="flex-1 bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white py-3 px-4 rounded-md font-medium transition-colors"
+          >
+            {loading ? "Saving..." : "Add Destination"}
+          </button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            disabled={loading}
+            className="flex-1 bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 text-white py-3 px-4 rounded-md font-medium transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
 
 export default AddDestination;
