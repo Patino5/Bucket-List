@@ -1,69 +1,61 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import myIcon from '../assets/walking.svg'
+import { addActivity } from './api';
 
 const AddActivity = () => {
     const { id } = useParams(); // gets destinationID from the URL
     const navigate = useNavigate();
-    const [title, setTitle] = useState("");
-    const [activityDescription, setActivityDescription] = useState("");
-    const [categoryID, setCategoryID] = useState("");
-    const [website, setWebsite] = useState("");
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [formData, setFormData] = useState({
+        title: "",
+        activityDescription: "",
+        categoryID: "",
+        website: "",
+        isCompleted: false
+    })
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         // Validation
-        if (!title.trim()) {
+        if (!formData.title.trim()) {
             alert("Title is required");
             return;
         }
-        if (!categoryID) {
+        if (!formData.categoryID) {
             alert("Please select a category");
             return;
         }
         
         try {
-            const response = await fetch("http://localhost:8080/api/activity", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    destinationID: parseInt(id, 10), // Use id from URL params
-                    title: title.trim(),
-                    activityDescription: activityDescription.trim() || null, // Handle empty string as null
-                    categoryID: parseInt(categoryID, 10), // Convert to integer
-                    website: website.trim() || null, // Handle empty string as null
-                    isCompleted: isCompleted
-                }),
-            });
-
-            console.log("Request payload:", {
+            const activityPayload = {
                 destinationID: parseInt(id, 10),
-                title: title.trim(),
-                activityDescription: activityDescription.trim() || null,
-                categoryID: parseInt(categoryID, 10),
-                website: website.trim() || null,
-                isCompleted: isCompleted
-            });
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Server response:", errorText);
-                throw new Error(`Failed to add activity: ${response.status} ${response.statusText}`);
+                title: formData.title.trim(),
+                activityDescription: formData.activityDescription.trim() || null,
+                categoryID: parseInt(formData.categoryID, 10),
+                website: formData.website.trim() || null,
+                isCompleted: formData.isCompleted,
             }
 
-            const data = await response.json();
+            const data = await addActivity(activityPayload);
             console.log("Activity added:", data);
 
             // Reset form after successful save
-            setTitle("");
-            setActivityDescription("");
-            setCategoryID("");
-            setWebsite("");
-            setIsCompleted(false);
+            setFormData({
+                title: "",
+                activityDescription: "",
+                categoryID: "",
+                website: "",
+                isCompleted: false
+            });
 
             // Navigate back to destination details
             navigate(`/layout/home/destination/${id}`);
@@ -96,8 +88,9 @@ const AddActivity = () => {
                         <label className="block mb-2 font-semibold">Title: *</label>
                         <input
                             type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            name="title"
+                            value={formData.title}
+                            onChange={handleChange}
                             className="border p-2 w-full rounded"
                             required
                             maxLength={100}
@@ -106,8 +99,9 @@ const AddActivity = () => {
                     <div className="mb-4">
                         <label className="block mb-2 font-semibold">Description:</label>
                         <textarea
-                            value={activityDescription}
-                            onChange={(e) => setActivityDescription(e.target.value)}
+                            name="activityDescription"
+                            value={formData.activityDescription}
+                            onChange={handleChange}
                             className="border p-2 w-full rounded h-24"
                             placeholder="Optional description of the activity"
                         />
@@ -115,8 +109,9 @@ const AddActivity = () => {
                     <div className="mb-4">
                         <label className="block mb-2 font-semibold">Category: *</label>
                         <select
-                            value={categoryID}
-                            onChange={(e) => setCategoryID(e.target.value)}
+                            name="categoryID"
+                            value={formData.categoryID}
+                            onChange={handleChange}
                             className="border p-2 w-full rounded"
                             required
                         >
@@ -132,8 +127,9 @@ const AddActivity = () => {
                         <label className="block mb-2 font-semibold">Website URL:</label>
                         <input
                             type="url"
-                            value={website}
-                            onChange={(e) => setWebsite(e.target.value)}
+                            name="website"
+                            value={formData.website}
+                            onChange={handleChange}
                             className="border p-2 w-full rounded"
                             maxLength={200}
                             placeholder="https://example.com"
@@ -143,8 +139,9 @@ const AddActivity = () => {
                         <label className="flex items-center gap-2 font-semibold">
                             <input
                                 type="checkbox"
-                                checked={isCompleted}
-                                onChange={(e) => setIsCompleted(e.target.checked)}
+                                name="isCompleted"
+                                checked={formData.isCompleted}
+                                onChange={handleChange}
                                 className="w-5 h-5"
                             />
                             Mark as Completed
@@ -168,7 +165,7 @@ const AddActivity = () => {
                 </form>
             </main>
         </>
-    )
-}
+    );
+};
 
 export default AddActivity;
