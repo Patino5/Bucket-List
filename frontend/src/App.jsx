@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import DestinationDetails from './pages/DestinationDetails';
 import EditDestination from './pages/EditDestination';
 import AddActivity from './pages/AddActivity';
+import AddActivityLog from './pages/AddActivityLog';
 import EditActivity from './pages/EditActivity';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -29,6 +30,7 @@ function App() {
           <Route path="/layout/home/destination/:id/activity/:activityID/edit" element={<EditActivity />} />
           <Route path="/layout/destinations" element={<ProtectedRoute><Destination /></ProtectedRoute>} />
           <Route path="/layout/activitylog" element={<ProtectedRoute><ActivityLog /></ProtectedRoute>} />
+          <Route path="/layout/home/destination/:id/activity/:activityID/add-memory" element={<ProtectedRoute><AddActivityLog /></ProtectedRoute>} />
           <Route path="/layout/*" element={<NoPage />} />
         </Route>
       </Routes>
