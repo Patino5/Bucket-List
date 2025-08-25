@@ -19,14 +19,15 @@ const EditActivity = () => {
     const [website, setWebsite] = useState("");
     const [isCompleted, setIsCompleted] = useState(false);
 
-    // Fetch the activity data when component mounts
     useEffect(() => {
         const fetchActivity = async () => {
             try {
                 const activityData = await getActivity(activityID);
+                console.log(activityData)
                 setActivity(activityData);
+
                 
-                // Populate form fields
+                // Populate form fields from existing activity
                 setTitle(activityData.title || "");
                 setActivityDescription(activityData.activityDescription || "");
                 setCategoryID(activityData.categoryID?.toString() || "");
@@ -49,7 +50,6 @@ const EditActivity = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Validation
         if (!title.trim()) {
             alert("Title is required");
             return;
@@ -149,7 +149,7 @@ const EditActivity = () => {
 
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block mb-2 font-semibold">Title: *</label>
+                        <label className="block mb-2 font-semibold">Title  <span className='text-red-500'>*</span></label>
                         <input
                             type="text"
                             value={title ?? ""}
@@ -160,7 +160,7 @@ const EditActivity = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block mb-2 font-semibold">Description:</label>
+                        <label className="block mb-2 font-semibold">Description</label>
                         <textarea
                             value={activityDescription}
                             onChange={(e) => setActivityDescription(e.target.value)}
@@ -169,7 +169,7 @@ const EditActivity = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block mb-2 font-semibold">Category: *</label>
+                        <label className="block mb-2 font-semibold">Category <span className='text-red-500'>*</span></label>
                         <select
                             value={categoryID}
                             onChange={(e) => setCategoryID(e.target.value)}
