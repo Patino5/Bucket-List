@@ -1,7 +1,6 @@
 package com.travelbucket.travelapp.controller;
 
 import com.travelbucket.travelapp.model.Activity;
-import com.travelbucket.travelapp.model.Destination;
 import com.travelbucket.travelapp.service.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,9 +33,31 @@ public class ActivityController {
         return ResponseEntity.ok(list);
     }
 
+    @GetMapping("/single/{activityID}")
+    public ResponseEntity<Activity> getById(@PathVariable("activityID") int activityID) {
+        Activity activity = activityService.getById(activityID);
+        if (activity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(activity);
+    }
+
     @PostMapping()
     public ResponseEntity<Activity> add(@RequestBody Activity activity) {
         Activity created = activityService.add(activity);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @DeleteMapping("/{activityID}")
+    public ResponseEntity<Void> delete(@PathVariable("activityID") int activityID) {
+        activityService.delete(activityID);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{activityID}")
+    public ResponseEntity<Activity> update(@PathVariable("activityID") int activityID, @RequestBody Activity activity) {
+        activity.setActivityID(activityID);
+        Activity updated = activityService.update(activity);
+        return ResponseEntity.ok(updated);
     }
 }

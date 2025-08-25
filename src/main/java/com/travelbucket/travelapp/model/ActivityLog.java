@@ -14,6 +14,7 @@ public class ActivityLog {
     private int activityID;
     private LocalDateTime createdAt;
     private String notes;
-    private String photoURL;
-
+    private byte[] photo;
+    private String photoMimeType;
+    private String photoFileName;
 }

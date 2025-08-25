@@ -29,10 +29,14 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public ResponseEntity<User> add(@RequestBody User user) {
-        User created = userService.add(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    @PostMapping("/register")
+    public ResponseEntity<?> add(@RequestBody User user) {
+        try {
+            User created = userService.add(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error registering user: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{userID}")

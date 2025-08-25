@@ -10,4 +10,6 @@ public interface ActivityLogRepository {
     public ActivityLog add(ActivityLog activityLog);
     public ActivityLog update(ActivityLog activityLog);
     public boolean delete(int memoryID);
+
+    public List<ActivityLog> getUserLogs(int userID);
 }
