@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import myIcon from '../assets/walking.svg'
-import { addActivity } from './api';
+import { addActivity } from '../api/api';
 
 const AddActivity = () => {
     const { id } = useParams(); // gets destinationID from the URL
@@ -24,7 +24,7 @@ const AddActivity = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         // Validation
         if (!formData.title.trim()) {
             alert("Title is required");
@@ -34,7 +34,7 @@ const AddActivity = () => {
             alert("Please select a category");
             return;
         }
-        
+
         try {
             const activityPayload = {
                 destinationID: parseInt(id, 10),
@@ -148,16 +148,16 @@ const AddActivity = () => {
                         </label>
                     </div>
                     <div className="flex gap-4">
-                        <button 
-                            type="submit" 
-                            className="bg-sky-600 hover:bg-sky-700 text-white py-2 px-6 rounded cursor-pointer"
+                        <button
+                            type="submit"
+                            className="bg-sky-600 hover:bg-sky-700 text-white py-2 px-6 rounded"
                         >
                             Create Activity
                         </button>
-                        <button 
+                        <button
                             type="button"
-                            onClick={handleCancel} 
-                            className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded cursor-pointer"
+                            onClick={handleCancel}
+                            className="bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded"
                         >
                             Cancel
                         </button>
