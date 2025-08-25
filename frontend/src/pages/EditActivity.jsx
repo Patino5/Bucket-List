@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getActivity, updateActivity } from './api'; // You'll need to implement these
+import { getActivity, updateActivity } from '../api/api'; // You'll need to implement these
 import myIcon from '../assets/walking.svg'
 
 const EditActivity = () => {
     const { id: destinationID, activityID } = useParams(); // Get both destination ID and activity ID
     const navigate = useNavigate();
-    
+
     const [activity, setActivity] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState(null);
-    
+
     // Form state
     const [title, setTitle] = useState("");
     const [activityDescription, setActivityDescription] = useState("");
@@ -26,14 +26,14 @@ const EditActivity = () => {
                 console.log(activityData)
                 setActivity(activityData);
 
-                
+
                 // Populate form fields from existing activity
                 setTitle(activityData.title || "");
                 setActivityDescription(activityData.activityDescription || "");
                 setCategoryID(activityData.categoryID?.toString() || "");
                 setWebsite(activityData.website || "");
                 setIsCompleted(activityData.isCompleted || false);
-                
+
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching activity:", err);
@@ -49,7 +49,7 @@ const EditActivity = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!title.trim()) {
             alert("Title is required");
             return;
@@ -58,9 +58,9 @@ const EditActivity = () => {
             alert("Please select a category");
             return;
         }
-        
+
         setSaving(true);
-        
+
         try {
             const updateData = {
                 activityID: parseInt(activityID, 10),
@@ -105,7 +105,7 @@ const EditActivity = () => {
         return (
             <div className="p-6">
                 <p className="text-red-500">Error: {error}</p>
-                <button 
+                <button
                     onClick={handleCancel}
                     className="mt-4 bg-gray-600 text-white py-2 px-4 rounded"
                 >
@@ -119,7 +119,7 @@ const EditActivity = () => {
         return (
             <div className="p-6">
                 <p className="text-red-500">Activity not found</p>
-                <button 
+                <button
                     onClick={handleCancel}
                     className="mt-4 bg-gray-600 text-white py-2 px-4 rounded"
                 >
@@ -207,16 +207,16 @@ const EditActivity = () => {
                         </label>
                     </div>
                     <div className="flex gap-4">
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             disabled={saving}
                             className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white py-2 px-6 rounded cursor-pointer"
                         >
                             {saving ? "Saving..." : "Update Activity"}
                         </button>
-                        <button 
+                        <button
                             type="button"
-                            onClick={handleCancel} 
+                            onClick={handleCancel}
                             disabled={saving}
                             className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white py-2 px-6 rounded cursor-pointer"
                         >

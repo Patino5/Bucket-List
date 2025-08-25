@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { updateDestination } from "./api"; // implement in api.js
+import { updateDestination } from "../api/api"; // implement in api.js
 
 const EditDestination = ({ destinations, setDestinations }) => {
   const { id } = useParams();
@@ -44,7 +44,7 @@ const EditDestination = ({ destinations, setDestinations }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     try {
       const updateData = {
         destinationID: destination.destinationID,
@@ -83,7 +83,7 @@ const EditDestination = ({ destinations, setDestinations }) => {
     return (
       <div className="p-6">
         <p className="text-red-500">Destination not found</p>
-        <button 
+        <button
           onClick={() => navigate("/layout/home")}
           className="mt-4 bg-gray-600 text-white py-2 px-4 rounded"
         >
@@ -134,14 +134,14 @@ const EditDestination = ({ destinations, setDestinations }) => {
         </div>
 
         <div className="flex gap-3 pt-4">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
             className="flex-1 bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white py-3 px-4 rounded-md font-medium transition-colors"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>
-          <button 
+          <button
             type="button"
             onClick={handleCancel}
             disabled={loading}

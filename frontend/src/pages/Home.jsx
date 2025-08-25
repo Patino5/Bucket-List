@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getDestinations, getCityImage } from "./api";
+import { getDestinations, getCityImage } from "../api/api";
 import { Link, Navigate } from "react-router";
 import Loading from "../components/Loading";
 
 const Home = ({ destinations, setDestinations }) => {
-    const [destination, setDestination] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -18,7 +17,6 @@ const Home = ({ destinations, setDestinations }) => {
 
         getDestinations(userID)
             .then(async (data) => {
-                // Attach image URLs directly to each destination
                 const destinationsWithImages = await Promise.all(
                     data.map(async (dest) => {
                         try {
@@ -27,7 +25,9 @@ const Home = ({ destinations, setDestinations }) => {
                         } catch {
                             return {
                                 ...dest,
-                                imageUrl: `https://picsum.photos/seed/${encodeURIComponent(dest.city)}/200`,
+                                imageUrl: `https://picsum.photos/seed/${encodeURIComponent(
+                                    dest.city
+                                )}/400/300`,
                             };
                         }
                     })
@@ -46,68 +46,76 @@ const Home = ({ destinations, setDestinations }) => {
     if (error) return <p className="text-red-500">{error}</p>;
 
     return (
-        <>
-            <div className="flex justify-between bg-neutral-300">
-                <h1 className="text-3xl m-5 mb-4">
-                    {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Destinations
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 bg-gradient-to-b from-blue-100 to-blue-300 ">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-10">
+                <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-teal-600 bg-clip-text text-transparent">
+                    {`${localStorage.getItem("userName")[0].toUpperCase() +
+                        localStorage.getItem("userName").slice(1)}`}’s Destinations
                 </h1>
-                <Link className="border-1 py-3 px-4 rounded-md m-5 text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700"  to="/layout/destinations">Add Destination</Link>
+                <Link
+                    to="/layout/destinations"
+                    className="px-5 py-3 rounded-xl font-medium shadow-md transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:scale-105 active:scale-95"
+                >
+                    ➕ Add Destination
+                </Link>
             </div>
 
-
+            {/* Destination Cards */}
             {destinations.length > 0 ? (
-                destinations.map((d) => (
-                    <div
-                        key={d.destinationID}
-                        className="space-y-2 grid md:grid-cols-2 md:gap-2 bg-neutral-200 shadow-2xl text-center md:text-left rounded p-7 m-10"
-                    >
-                        <img
-                            className="mx-auto block h-50 w-70 shadow-lg rounded-full md:mx-0 md:shrink-0 md:h-90 md:w-120"
-                            src={d.imageUrl}
-                            alt={`Picture of ${d.city}, ${d.country}`}
-                        />
-
-                        <div className="space-y-0.5 m-auto content-center">
-                            <p className="text-2xl font-semibold text-black">
-                                {d.city}, {d.country}
-                            </p>
-                            {d.homeDeparture === null ? (
-                                <p className="font-medium text-gray-500">
-                                    No flights scheduled
-                                </p>
-                            ) : (
-                                <>
-                                    <p className="font-medium text-gray-500">
-                                        Home departure:{" "}
-                                        {new Date(d.homeDeparture).toLocaleString()}
-                                    </p>
-                                    <p className="font-medium text-gray-500">
-                                        Destination departure:{" "}
-                                        {new Date(d.destinationDeparture).toLocaleString()}
-                                    </p>
-                                </>
-                            )}
-                            <div className="my-5">
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                    {destinations.map((d) => (
+                        <div
+                            key={d.destinationID}
+                            className="group bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]"
+                        >
+                            <img
+                                src={d.imageUrl}
+                                alt={`Picture of ${d.city}, ${d.country}`}
+                                className="h-56 w-full object-cover transition-transform duration-500"
+                            />
+                            <div className="p-6 space-y-3">
+                                <h2 className="text-2xl font-semibold text-gray-900">
+                                    {d.city}, {d.country}
+                                </h2>
+                                {d.homeDeparture ? (
+                                    <>
+                                        <p className="text-gray-600 text-sm">
+                                            🛫 Home Departure:{" "}
+                                            {new Date(d.homeDeparture).toLocaleString()}
+                                        </p>
+                                        <p className="text-gray-600 text-sm">
+                                            🛬 Destination Departure:{" "}
+                                            {new Date(d.destinationDeparture).toLocaleString()}
+                                        </p>
+                                    </>
+                                ) : (
+                                    <p className="text-gray-500 italic">No flights scheduled</p>
+                                )}
                                 <Link
                                     to={`/layout/home/destination/${d.destinationID}`}
-                                    className="border-1 py-3 px-4 rounded-md text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700"
+                                    className="inline-block mt-4 px-4 py-2 rounded-xl font-medium shadow-md bg-gradient-to-r from-blue-500 to-blue-600 text-white transition-all duration-300 hover:scale-105 active:scale-95"
                                 >
-                                    View Details
+                                    View Details →
                                 </Link>
                             </div>
-
                         </div>
-
-                    </div>
-
-                ))
+                    ))}
+                </div>
             ) : (
-                <>
-                    <p>Add a Destination to your bucket list!</p>
-                    <button className="border-1 py-1 px-2 rounded-4xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700" ><Link to="/layout/destinations">Add Destination</Link></button>
-                </>
+                <div className="text-center mt-20">
+                    <p className="text-lg text-gray-600 mb-6">
+                        Add a Destination to your bucket list!
+                    </p>
+                    <Link
+                        to="/layout/destinations"
+                        className="px-6 py-3 rounded-xl font-medium shadow-md transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:scale-105 active:scale-95"
+                    >
+                        ➕ Add Destination
+                    </Link>
+                </div>
             )}
-        </>
+        </div>
     );
 };
 
