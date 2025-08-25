@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getDestinations, getCityImage } from "./api";
 import { Link, Navigate } from "react-router";
-import SplashScreen from "./Splash";
+import Loading from "../components/Loading";
 
 const Home = ({ destinations, setDestinations }) => {
     const [destination, setDestination] = useState([]);
@@ -42,20 +42,24 @@ const Home = ({ destinations, setDestinations }) => {
             });
     }, [setDestinations]);
 
-    if (loading) return <SplashScreen />;
+    if (loading) return <Loading />;
     if (error) return <p className="text-red-500">{error}</p>;
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-4">
-                {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Destinations
-            </h1>
+        <>
+            <div className="flex justify-between bg-neutral-300">
+                <h1 className="text-3xl m-5 mb-4">
+                    {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Destinations
+                </h1>
+                <Link className="border-1 py-3 px-4 rounded-md m-5 text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700"  to="/layout/destinations">Add Destination</Link>
+            </div>
+
 
             {destinations.length > 0 ? (
                 destinations.map((d) => (
                     <div
                         key={d.destinationID}
-                        className="space-y-2 grid md:grid-cols-2 md:gap-2 bg-neutral-200 shadow-2xl text-center md:text-left rounded py-7 mb-10"
+                        className="space-y-2 grid md:grid-cols-2 md:gap-2 bg-neutral-200 shadow-2xl text-center md:text-left rounded p-7 m-10"
                     >
                         <img
                             className="mx-auto block h-50 w-70 shadow-lg rounded-full md:mx-0 md:shrink-0 md:h-90 md:w-120"
@@ -85,25 +89,25 @@ const Home = ({ destinations, setDestinations }) => {
                             )}
                             <div className="my-5">
                                 <Link
-                            to={`/layout/home/destination/${d.destinationID}`}
-                            className="border-1 py-1 px-2 rounded-4xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700"
-                        >
-                            View Details
-                        </Link>
+                                    to={`/layout/home/destination/${d.destinationID}`}
+                                    className="border-1 py-3 px-4 rounded-md text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700"
+                                >
+                                    View Details
+                                </Link>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
-                    
+
                 ))
             ) : (
                 <>
                     <p>Add a Destination to your bucket list!</p>
-                    <Link to="/layout/destinations">Add Destination</Link>
+                    <button className="border-1 py-1 px-2 rounded-4xl text-purple-600 hover:border-transparent hover:bg-purple-600 hover:text-white active:bg-purple-700" ><Link to="/layout/destinations">Add Destination</Link></button>
                 </>
             )}
-        </div>
+        </>
     );
 };
 
