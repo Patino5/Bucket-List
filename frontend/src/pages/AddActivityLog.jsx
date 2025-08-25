@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getActivity, addActivityLog } from './api';
+import { getActivity, addActivityLog } from '../api/api';
 import Loading from '../components/Loading';
 
 const AddActivityLog = () => {
@@ -99,7 +99,7 @@ const AddActivityLog = () => {
                 URL.revokeObjectURL(photoPreviewUrl);
             }
 
-            navigate(`/layout/home/destination/${id}`); // use correct param from useParams
+            navigate(`/layout/home/destination/${id}`);
         } catch (err) {
             alert("Error adding memory: " + err.message);
         } finally {
@@ -183,18 +183,18 @@ const AddActivityLog = () => {
                 {/* Submit Buttons */}
                 <div className="flex gap-4 pt-4">
                     <button
-                        type="button"
-                        onClick={handleCancel}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Cancel
-                    </button>
-                    <button
                         type="submit"
                         disabled={submitting || !formData.notes.trim()}
                         className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {submitting ? 'Saving...' : 'Save Memory'}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleCancel}
+                        className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        Cancel
                     </button>
                 </div>
             </form>
