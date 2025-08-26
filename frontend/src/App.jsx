@@ -13,6 +13,8 @@ import AddActivity from './pages/AddActivity';
 import AddActivityLog from './pages/AddActivityLog';
 import EditActivity from './pages/EditActivity';
 import ProtectedRoute from './pages/ProtectedRoute';
+import EditActivityLog from './pages/EditActivityLog';
+
 
 function App() {
   const [destinations, setDestinations] = useState([]);
@@ -31,6 +33,8 @@ function App() {
           <Route path="/layout/destinations" element={<ProtectedRoute><Destination /></ProtectedRoute>} />
           <Route path="/layout/activitylog" element={<ProtectedRoute><ActivityLog /></ProtectedRoute>} />
           <Route path="/layout/home/destination/:id/activity/:activityID/add-memory" element={<ProtectedRoute><AddActivityLog /></ProtectedRoute>} />
+          // Add this route to your router configuration
+          <Route path="/layout/home/destination/:id/activity/:activityID/memory/:memoryID/edit" element={<ProtectedRoute><EditActivityLog /></ProtectedRoute>} />
           <Route path="/layout/*" element={<NoPage />} />
         </Route>
       </Routes>
