@@ -102,16 +102,25 @@ public class ActivityLogRepo implements ActivityLogRepository {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, activityLog.getNotes());
 
-            // Handle BLOB image data
-            if (activityLog.getPhoto() != null) {
+            // Handle BLOB image data - explicitly handle null
+            if (activityLog.getPhoto() != null && activityLog.getPhoto().length > 0) {
                 ps.setBytes(2, activityLog.getPhoto());
             } else {
                 ps.setNull(2, java.sql.Types.BLOB);
             }
 
-            // Handle photo metadata
-            ps.setString(3, activityLog.getPhotoMimeType());
-            ps.setString(4, activityLog.getPhotoFileName());
+            if (activityLog.getPhotoMimeType() != null && !activityLog.getPhotoMimeType().trim().isEmpty()) {
+                ps.setString(3, activityLog.getPhotoMimeType());
+            } else {
+                ps.setNull(3, java.sql.Types.VARCHAR);
+            }
+
+            if (activityLog.getPhotoFileName() != null && !activityLog.getPhotoFileName().trim().isEmpty()) {
+                ps.setString(4, activityLog.getPhotoFileName());
+            } else {
+                ps.setNull(4, java.sql.Types.VARCHAR);
+            }
+
             ps.setInt(5, activityLog.getMemoryID());
 
             return ps;
