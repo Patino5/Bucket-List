@@ -8,6 +8,7 @@ export async function getDestinations(userID) {
     const res = await fetch(`${API_BASE}/destinations/user/${userID}`);
 
     if (!res.ok) throw new Error("Failed to fetch destinations");
+    
     return res.json();
 }
 
@@ -15,6 +16,7 @@ export async function getDestination(destinationID) {
     const res = await fetch(`${API_BASE}/destinations/${destinationID}`);
 
     if (!res.ok) throw new Error("Failed to fetch destinations");
+
     return res.json();
 }
 
@@ -40,7 +42,9 @@ export async function deleteDestination(destinationID) {
     const res = await fetch(`${API_BASE}/destinations/${destinationID}`, {
         method: "DELETE",
     })
+
     if (!res.ok) throw new Error("Failed to delete destination " + destinationID)
+
     return res.status
 }
 
@@ -54,6 +58,7 @@ export async function updateDestination(destinationID, updateData) {
     });
 
     if (!res.ok) throw new Error(`Failed to update destination ${destinationID}: ${res.status} ${res.statusText}`);
+
     return await res.json();
 }
 
@@ -62,6 +67,7 @@ export async function getActivities(destinationID) {
     const res = await fetch(`${API_BASE}/activity/${destinationID}`);
 
     if (!res.ok) throw new Error("Failed to fetch activites");
+
     return res.json();
 }
 
@@ -124,6 +130,7 @@ export async function deleteActivity(activityID) {
     });
 
     if (!res.ok) throw new Error(`Failed to delete activity ${activityID}: ${res.status} ${res.statusText}`)
+
     return res.status
 }
 
@@ -132,6 +139,7 @@ export async function getLogs() {
     const res = await fetch(`${API_BASE}/activitylogs`);
 
     if (!res.ok) throw new Error("Failed to fetch activity logs");
+
     return res.json();
 }
 
@@ -139,18 +147,42 @@ export async function getUsersLogs(userID) {
     const res = await fetch(`${API_BASE}/activitylogs/user/${userID}`);
 
     if (!res.ok) throw new Error("Faild to fetch user's activity logs");
+
+    return res.json();
+}
+
+export async function getActivityLogById(memoryID) {
+    const res = await fetch(`${API_BASE}/activitylogs/${memoryID}`);
+
+    if (!res.ok) throw new Error(`Failed to fetch memory ${memoryID}`);
+
     return res.json();
 }
 
 export async function addActivityLog(formData) {
     const response = await fetch(`${API_BASE}/activitylogs`, {
-    method: "POST",
-    body: formData,
-  });
-  if (!response.ok) {
-    throw new Error("Failed to save activity log");
-  }
-  return await response.json();
+        method: "POST",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to save activity log");
+    }
+
+    return await response.json();
+}
+
+export async function updateActivityLog(memoryID, formData) {
+    const response = await fetch(`${API_BASE}/activitylogs/${memoryID}`, {
+        method: "PUT",
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to update activity log");
+    }
+
+    return await response.json();
 }
 
 export async function deleteMemory(memoryID) {
@@ -162,6 +194,7 @@ export async function deleteMemory(memoryID) {
     });
 
     if (!res.ok) throw new Error(`Failed to delete memory ${memoryID}: ${res.status} ${res.statusText}`)
+
     return res.status
 }
 
@@ -172,5 +205,6 @@ export async function getCityImage(city) {
         `https://api.unsplash.com/search/photos?query=${encodeURIComponent(city)}&client_id=${accessKey}&per_page=1&orientation=landscape`
     );
     const data = await res.json();
+
     return data.results.length > 0 ? data.results[0].urls.small : null;
 }
