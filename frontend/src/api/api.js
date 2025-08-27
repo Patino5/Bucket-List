@@ -1,6 +1,17 @@
-import { act } from "react";
-
 const API_BASE = "http://localhost:8080/api";
+
+// User
+export async function deleteUser(userID) {
+    const res = await fetch(`${API_BASE}/users/${userID}`, {
+        method: "DELETE",
+    });
+
+    console.log(res.ok)
+
+    if (!res.ok) throw new Error("Failed to delete user");
+
+    return res.status;
+}
 
 
 // Destination
@@ -8,7 +19,7 @@ export async function getDestinations(userID) {
     const res = await fetch(`${API_BASE}/destinations/user/${userID}`);
 
     if (!res.ok) throw new Error("Failed to fetch destinations");
-    
+
     return res.json();
 }
 
