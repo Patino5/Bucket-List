@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { getUsersLogs, getActivity, getDestination, deleteMemory } from "../api/api";
 import Loading from "../components/Loading";
-import ConfirmModal from "../components/ConfimModal";
+import ConfirmModal from "../components/destination/ConfimModal";
+import MemoryCard from "../components/activityLog/MemoryCard";
+import Gallery from "../components/activityLog/Gallery";
 
 const ActivityLog = () => {
     const navigate = useNavigate();
@@ -11,6 +13,10 @@ const ActivityLog = () => {
     const [error, setError] = useState(null);
 
     const [memoryToDelete, setMemoryToDelete] = useState(null);
+    const [viewGallery, setViewGallery] = useState(false)
+    const gallery = userLogs
+        .filter((m) => m.photoBase64)
+        .map((m) => m.photoBase64);
 
     useEffect(() => {
         const fetchLogs = async () => {
@@ -67,16 +73,6 @@ const ActivityLog = () => {
         fetchLogs();
     }, []);
 
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
-
     const handleDeleteMemory = async (memoryID) => {
         try {
             console.log(memoryID);
@@ -109,72 +105,27 @@ const ActivityLog = () => {
     return (
         <div className="space-y-6 p-6 bg-gradient-to-b from-blue-100 to-blue-300 min-h-screen">
 
-            <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-teal-600 to-purple-600 bg-clip-text text-transparent">
-                {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Memories
-            </h2>
+            <div className="flex justify-between">
+                <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-teal-600 to-purple-600 bg-clip-text text-transparent">
+                    {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Memories
+                </h2>
+                <button className="mr-5" onClick={() => setViewGallery((prev) => !prev)}
+                >
+                    {viewGallery ? "View Cards" : "View Gallery"}
+                </button>
+            </div>
 
-            {userLogs.map((memory) => (
-                <div key={memory.memoryID} className="bg-neutral-50 rounded-lg shadow-md p-6 border">
-                    {/* Header with date */}
-                    <div className="flex justify-between items-start mb-4">
-                        <h4 className="text-lg font-medium text-gray-800">{memory.activityTitle}</h4>
-                        <span className="text-sm text-gray-500">{formatDate(memory.createdAt)}</span>
-                    </div>
-
-                    {/* Notes */}
-                    {memory.notes && (
-                        <div className="mb-4">
-                            <p className="text-gray-700 leading-relaxed">{memory.notes}</p>
-                        </div>
-                    )}
-
-                    {/* Image */}
-                    {memory.photoBase64 && (
-                        <div className="mb-4">
-                            <img
-                                src={memory.photoBase64}
-                                alt={memory.photoFileName || 'Activity memory'}
-                                className="w-full max-w-md h-64 object-cover rounded-lg shadow-sm border"
-                                onError={(e) => {
-                                    e.target.style.display = 'none';
-                                    console.error('Failed to load image for memory:', memory.memoryID);
-                                    console.error('Photo data length:', memory.photo?.length);
-                                    console.error('MIME type:', memory.photoMimeType);
-                                }}
-                                onLoad={() => {
-                                    console.log("Image loaded successfully for memory: ", memory.memoryID);
-                                }}
-                            />
-                            {memory.photoFileName && (
-                                <p className="text-xs text-gray-500 mt-1">{memory.photoFileName}</p>
-                            )}
-                        </div>
-                    )}
-
-                    {/* Footer */}
-                    <div className="flex justify-between items-center text-sm text-gray-400 pt-3 border-t">
-                        <span>Location: {memory.logDestination}</span>
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() =>
-                                    navigate(`/layout/home/destination/${memory.destinationID}/activity/${memory.activityID}/memory/${memory.memoryID}/edit`)
-                                }
-                                className="px-3 py-2 rounded-xl text-xs font-medium shadow bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:scale-105 active:scale-95"
-                            >
-                                ✏️ Edit
-                            </button>
-                            <button
-                                onClick={() => setMemoryToDelete(memory)}
-                                className="px-3 py-2 rounded-xl text-xs font-medium shadow bg-gradient-to-r from-red-500 to-red-600 text-white hover:scale-105 active:scale-95"
-                            >
-                                🗑️ Delete
-                            </button>
-                        </div>
-
-
-                    </div>
-                </div>
-            ))}
+            {viewGallery ? (
+                <>
+                    <Gallery gallery={gallery} />
+                </>
+            ) : (
+                <>
+                    {userLogs.map((memory) => (
+                        <MemoryCard key={memory.memoryID} memory={memory} setMemoryToDelete={setMemoryToDelete} />
+                    ))}
+                </>
+            )}
 
             {memoryToDelete && (
                 <ConfirmModal
