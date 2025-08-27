@@ -146,6 +146,7 @@ const Login = () => {
                         >
                             {isRegister ? "Sign Up" : "Login"}
                         </button>
+                        <button className="bg-neutral-600 text-white py-3 rounded-lg font-semibold hover:bg-neutral-700 transition mt-3" onClick={() => (setShowForm(false))}>Cancel</button>
                         {error && (
                             <p className="text-red-500 mt-3 text-sm text-center">{error}</p>
                         )}

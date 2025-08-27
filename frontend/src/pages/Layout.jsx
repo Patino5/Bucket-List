@@ -40,20 +40,29 @@ const Layout = () => {
                                 {location.pathname !== "/layout/login" && (
                                     <>
                                         <li>
-                                            <Link 
+                                            <Link
                                                 className="group relative px-4 py-2 text-lg font-medium text-gray-700 rounded-xl transition-all duration-300 hover:text-white hover:shadow-lg hover:scale-105 hover:bg-gradient-to-r hover:from-purple-500 hover:to-purple-600 active:scale-95"
                                                 to="/layout/home"
                                             >
-                                                <span className="relative z-10">🌍 Destinations</span>
+                                                <span className="relative z-10">Destinations</span>
                                                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link 
+                                            <Link
                                                 className="group relative px-4 py-2 text-lg font-medium text-gray-700 rounded-xl transition-all duration-300 hover:text-white hover:shadow-lg hover:scale-105 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 active:scale-95"
                                                 to="/layout/activitylog"
                                             >
-                                                <span className="relative z-10">📸 Memories</span>
+                                                <span className="relative z-10">Memories</span>
+                                                <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link
+                                                className="group relative px-4 py-2 text-lg font-medium text-gray-700 rounded-xl transition-all duration-300 hover:text-white hover:shadow-lg hover:scale-105 hover:bg-gradient-to-r hover:from-green-500 hover:to-green-600 active:scale-95"
+                                                to="/layout/profile"
+                                            >
+                                                <span className="relative z-10">Profile</span>
                                                 <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                             </Link>
                                         </li>
@@ -75,15 +84,15 @@ const Layout = () => {
                         {/* Mobile Menu Button */}
                         <div className="md:hidden">
                             {location.pathname !== "/layout/login" && (
-                                <button 
+                                <button
                                     onClick={toggleMobileMenu}
                                     className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
                                     aria-label="Toggle mobile menu"
                                 >
-                                    <svg 
-                                        className={`w-6 h-6 transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : ''}`} 
-                                        fill="none" 
-                                        stroke="currentColor" 
+                                    <svg
+                                        className={`w-6 h-6 transition-transform duration-200 ${isMobileMenuOpen ? 'rotate-90' : ''}`}
+                                        fill="none"
+                                        stroke="currentColor"
                                         viewBox="0 0 24 24"
                                     >
                                         {isMobileMenuOpen ? (
@@ -101,7 +110,7 @@ const Layout = () => {
                     {isMobileMenuOpen && location.pathname !== "/layout/login" && (
                         <div className="md:hidden border-t border-gray-200/50 bg-white/95 backdrop-blur-md">
                             <div className="px-6 py-4 space-y-3">
-                                <Link 
+                                <Link
                                     className="flex items-center space-x-3 px-4 py-3 text-gray-700 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-purple-500/10 hover:to-purple-600/10 hover:text-purple-600"
                                     to="/layout/home"
                                     onClick={() => setIsMobileMenuOpen(false)}
@@ -109,13 +118,23 @@ const Layout = () => {
                                     <span className="text-xl">🌍</span>
                                     <span className="font-medium">Destinations</span>
                                 </Link>
-                                <Link 
+                                <Link
                                     className="flex items-center space-x-3 px-4 py-3 text-gray-700 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-blue-600/10 hover:text-blue-600"
                                     to="/layout/activitylog"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                     <span className="text-xl">📸</span>
                                     <span className="font-medium">Memories</span>
+                                </Link>
+                                <Link
+                                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 rounded-xl transition-all duration-300 hover:bg-gradient-to-r hover:from-green-500/10 hover:to-green-600/10 hover:text-green-600"
+                                    to="/layout/profile"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    <span className="text-xl">👤</span>
+                                    <span className="font-medium">Profile</span>
+
+
                                 </Link>
                                 <Link
                                     onClick={handleLogout}
