@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { getDestinations, getCityImage } from "../api/api";
 import { Link, Navigate } from "react-router";
 import Loading from "../components/Loading";
-import Header from "../components/home/Header";
-import DestinationCard from "../components/home/DestinationCard";
-import NoDestination from "../components/home/NoDestinations";
+import Header from "../components/Home/Header";
+import DestinationCard from "../components/Home/DestinationCard";
+import NoDestination from "../components/Home/NoDestinations";
 
 
 const Home = ({ destinations, setDestinations }) => {
