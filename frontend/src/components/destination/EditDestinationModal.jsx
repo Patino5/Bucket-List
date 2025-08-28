@@ -77,11 +77,11 @@ const EditDestinationModal = ({ destination, onClose, onUpdate }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-gray-950 mask-x-from-90% mask-x-to-100% mask-y-from-90% mask-y-to-100% flex items-center justify-center z-50"
+      className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
       onClick={handleBackdropClick}
     >
       <div>
-        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="bg-white rounded-lg p-6 max-w-sm w-full mx-auto max-h-[90vh] overflow-y-auto">
           <div className="mb-6">
             <h2 className="text-2xl font-bold mb-2">Edit Destination</h2>
             <p className="text-gray-600">
