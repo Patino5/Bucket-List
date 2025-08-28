@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import { getUsersLogs, getActivity, getDestination, deleteMemory } from "../api/api";
 import Loading from "../components/Loading";
 import ConfirmModal from "../components/destination/ConfimModal";
-import MemoryCard from "../components/activityLog/MemoryCard";
-import Gallery from "../components/activityLog/Gallery";
+import MemoryCard from "../components/ActivityLog/MemoryCard";
+import Gallery from "../components/ActivityLog/Gallery";
 
 const ActivityLog = () => {
-    const navigate = useNavigate();
     const [userLogs, setUserLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -109,16 +107,16 @@ const ActivityLog = () => {
                 <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 via-teal-600 to-purple-600 bg-clip-text text-transparent">
                     {`${localStorage.getItem("userName")[0].toUpperCase() + localStorage.getItem("userName").slice(1)}`}’s Memories
                 </h2>
-                <button className="mr-5" onClick={() => setViewGallery((prev) => !prev)}
+                <button className="mr-5 px-5 py-3 rounded-xl font-medium shadow-md transition-all duration-300 bg-gradient-to-r from-purple-500 to-purple-600 text-white hover:scale-105 active:scale-95" onClick={() => setViewGallery((prev) => !prev)}
                 >
                     {viewGallery ? "View Cards" : "View Gallery"}
                 </button>
             </div>
 
             {viewGallery ? (
-                <>
+                <div className="flex justify-center items-center min-h-[70vh]">
                     <Gallery gallery={gallery} />
-                </>
+                </div>
             ) : (
                 <>
                     {userLogs.map((memory) => (
