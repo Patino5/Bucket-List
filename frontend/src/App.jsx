@@ -15,7 +15,6 @@ import ProtectedRoute from './pages/ProtectedRoute';
 import EditActivityLog from './pages/EditActivityLog';
 import Profile from './pages/Profile';
 
-
 function App() {
   const [destinations, setDestinations] = useState([]);
 
