@@ -13,14 +13,14 @@ const Gallery = ({ gallery }) => {
       pagination={{ clickable: true }}
       spaceBetween={20}
       slidesPerView={1}
-      className="w-full max-w-3xl mx-auto rounded-lg shadow-lg"
+      className="w-full max-w-3xl mx-auto rounded-2xl shadow-lg"
     >
       {gallery.map((src, index) => (
         <SwiperSlide key={index}>
           <img
             src={src}
             alt={`Memory ${index + 1}`}
-            className="w-full h-96 object-cover rounded-lg"
+            className="w-full h-[70vh] max-h-screen object-cover rounded-lg"
           />
         </SwiperSlide>
       ))}
