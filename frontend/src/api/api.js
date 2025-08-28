@@ -1,6 +1,14 @@
 const API_BASE = import.meta.env.VITE_API_URL;
 
 // User
+export async function getUser(userID) {
+    const res = await fetch(`${API_BASE}/users/user/${userID}`);
+
+    if (!res) throw new Error("Failed to fetch user");
+
+    return res.json();
+}
+
 export async function deleteUser(userID) {
     const res = await fetch(`${API_BASE}/users/${userID}`, {
         method: "DELETE",
