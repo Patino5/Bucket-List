@@ -38,11 +38,6 @@ const MemoryCard = ({ memory, setMemoryToDelete }) => {
                                 onError={(e) => {
                                     e.target.style.display = 'none';
                                     console.error('Failed to load image for memory:', memory.memoryID);
-                                    console.error('Photo data length:', memory.photo?.length);
-                                    console.error('MIME type:', memory.photoMimeType);
-                                }}
-                                onLoad={() => {
-                                    console.log("Image loaded successfully for memory: ", memory.memoryID);
                                 }}
                             />
                             {memory.photoFileName && (
