@@ -48,7 +48,6 @@ const AddActivity = () => {
             const data = await addActivity(activityPayload);
             console.log("Activity added:", data);
 
-            // Reset form after successful save
             setFormData({
                 title: "",
                 activityDescription: "",
@@ -57,7 +56,6 @@ const AddActivity = () => {
                 isCompleted: false
             });
 
-            // Navigate back to destination details
             navigate(`/layout/home/destination/${id}`);
 
         } catch (error) {
@@ -67,7 +65,6 @@ const AddActivity = () => {
     }
 
     const handleCancel = () => {
-        // Navigate back without saving
         navigate(`/layout/home/destination/${id}`);
     }
 

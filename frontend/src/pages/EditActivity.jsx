@@ -210,7 +210,7 @@ const EditActivity = () => {
                         <button
                             type="submit"
                             disabled={saving}
-                            className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white py-2 px-6 rounded cursor-pointer"
+                            className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-400 text-white py-2 px-6 rounded"
                         >
                             {saving ? "Saving..." : "Update Activity"}
                         </button>
@@ -218,7 +218,7 @@ const EditActivity = () => {
                             type="button"
                             onClick={handleCancel}
                             disabled={saving}
-                            className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white py-2 px-6 rounded cursor-pointer"
+                            className="bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white py-2 px-6 rounded"
                         >
                             Cancel
                         </button>

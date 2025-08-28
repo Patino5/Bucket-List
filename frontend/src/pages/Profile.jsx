@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash2 } from "lucide-react"; // icons
-import { deleteUser } from "../api/api";
+import { Trash2 } from "lucide-react"; 
+import { getUser, deleteUser } from "../api/api";
+import Loading from "../components/Loading";
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -11,15 +12,13 @@ const Profile = () => {
 
     useEffect(() => {
         const userID = localStorage.getItem("userID");
-        const userName = localStorage.getItem("userName");
 
         if (!userID) {
             navigate("/login");
             return;
         }
 
-        fetch(`http://localhost:8080/api/users/user/${userID}`)
-            .then((res) => res.json())
+        getUser(userID)
             .then((data) => setUser(data))
             .catch(() => setError("Failed to load profile"));
     }, [navigate]);
@@ -36,7 +35,7 @@ const Profile = () => {
         }
     };
 
-    if (!user) return <div className="p-6">Loading profile...</div>;
+    if (!user) return <Loading />;
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 flex items-center justify-center px-4">
