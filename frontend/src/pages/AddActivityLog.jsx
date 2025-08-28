@@ -52,8 +52,6 @@ const AddActivityLog = () => {
             setFormData(prev => ({ ...prev, photo: file }));
         }
 
-
-
         // Create preview URL
         if (file) {
             const previewUrl = URL.createObjectURL(file);
@@ -180,7 +178,7 @@ const AddActivityLog = () => {
                     )}
                 </div>
 
-                {/* Submit Buttons */}
+                {/* Action Buttons */}
                 <div className="flex gap-4 pt-4">
                     <button
                         type="submit"
