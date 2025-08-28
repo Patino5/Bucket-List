@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = import.meta.env.VITE_API_URL;
 
 // User
 export async function deleteUser(userID) {
@@ -41,9 +41,9 @@ export async function addDestination(destination) {
     });
 
     if (!res.ok) {
-        const errorText = await response.text();
+        const errorText = await res.text();
         console.error("Server response:", errorText);
-        throw new Error(`Failed to add destination: ${response.status} ${response.statusText}`);
+        throw new Error(`Failed to add destination: ${res.status} ${res.statusText}`);
     }
 
     return res.json();
@@ -107,9 +107,19 @@ export async function addActivity(activity) {
     });
 
     if (!res.ok) {
-        const errorText = await response.text();
-        console.error("Server response:", errorText);
-        throw new Error(`Failed to add activity: ${response.status} ${response.statusText}`);
+        let errorMessage = `Failed to add activity: ${res.status} ${res.statusText}`;
+
+        try {
+            const errorData = await res.json(); // try parse JSON error
+            if (errorData.error) {
+                errorMessage = errorData.error; // use backend error message
+            }
+        } catch {
+            const errorText = await res.text();
+            if (errorText) errorMessage = errorText;
+        }
+
+        throw new Error(errorMessage);
     }
 
     return res.json();
@@ -126,7 +136,19 @@ export async function updateActivity(activityID, updateData) {
     });
 
     if (!res.ok) {
-        throw new Error(`Failed to update activity ${activityID}: ${res.status} ${res.statusText}`)
+        let errorMessage = `Failed to add activity: ${res.status} ${res.statusText}`;
+
+        try {
+            const errorData = await res.json(); // try parse JSON error
+            if (errorData.error) {
+                errorMessage = errorData.error; // use backend error message
+            }
+        } catch {
+            const errorText = await res.text();
+            if (errorText) errorMessage = errorText;
+        }
+
+        throw new Error(errorMessage);
     }
 
     return await res.json();
@@ -184,16 +206,16 @@ export async function addActivityLog(formData) {
 }
 
 export async function updateActivityLog(memoryID, formData) {
-    const response = await fetch(`${API_BASE}/activitylogs/${memoryID}`, {
+    const res = await fetch(`${API_BASE}/activitylogs/${memoryID}`, {
         method: "PUT",
         body: formData,
     });
 
-    if (!response.ok) {
+    if (!res.ok) {
         throw new Error("Failed to update activity log");
     }
 
-    return await response.json();
+    return await res.json();
 }
 
 export async function deleteMemory(memoryID) {
