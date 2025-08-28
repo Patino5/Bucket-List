@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Trash2, LogOut } from "lucide-react"; // icons
+import { Trash2 } from "lucide-react"; // icons
 import { deleteUser } from "../api/api";
 
 const Profile = () => {
@@ -28,16 +28,12 @@ const Profile = () => {
         try {
             await deleteUser(user.userID)
             localStorage.clear()
+            alert(`Good bye ${user.userName}`)
             navigate("/layout/login");
 
         } catch (err) {
             setError("Error deleting account");
         }
-    };
-
-    const handleLogout = () => {
-        localStorage.clear();
-        navigate("/layout/login");
     };
 
     if (!user) return <div className="p-6">Loading profile...</div>;
