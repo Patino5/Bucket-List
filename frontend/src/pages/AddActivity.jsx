@@ -62,7 +62,7 @@ const AddActivity = () => {
 
         } catch (error) {
             console.error("Error:", error);
-            alert(`Error adding activity: ${error.message}`);
+            alert(error.message);
         }
     }
 
