@@ -37,17 +37,6 @@ public class ActivityLogController {
     public ResponseEntity<List<ActivityLog>> getUsersLogs(@PathVariable("userID") int userID) {
         try {
             List<ActivityLog> userLogs = activityLogService.getUserLogs(userID);
-
-            // Log for debugging
-            if (userLogs != null) {
-                for (ActivityLog log : userLogs) {
-                    if (log.getPhoto() != null) {
-                        System.out.println("Memory " + log.getMemoryID() + " has photo of length: " + log.getPhoto().length);
-                        System.out.println("MIME type: " + log.getPhotoMimeType());
-                    }
-                }
-            }
-
             return userLogs != null ? ResponseEntity.ok(userLogs) : ResponseEntity.notFound().build();
         } catch (Exception e) {
             System.err.println("Error fetching user logs: " + e.getMessage());
@@ -59,7 +48,7 @@ public class ActivityLogController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ActivityLog> addActivityLog(
             @RequestParam("activityID") int activityID,
-            @RequestParam(value = "notes", required = false) String notes,
+            @RequestParam(value = "notes") String notes,
             @RequestParam(value = "photo", required = false) MultipartFile photo
     ) {
         try {
@@ -84,7 +73,7 @@ public class ActivityLogController {
     @PutMapping(value = "/{memoryID}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ActivityLog> updateActivityLog(
             @PathVariable("memoryID") int memoryID,
-            @RequestParam(value = "notes", required = false) String notes,
+            @RequestParam(value = "notes") String notes,
             @RequestParam(value = "photo", required = false) MultipartFile photo,
             @RequestParam(value = "removeCurrentPhoto", defaultValue = "false") boolean removeCurrentPhoto
     ) {
@@ -119,11 +108,6 @@ public class ActivityLogController {
                 existingLog.setPhoto(photoBytes);
                 existingLog.setPhotoMimeType(photo.getContentType());
                 existingLog.setPhotoFileName(photo.getOriginalFilename());
-
-                // Debug logging
-                System.out.println("Updating photo: " + photo.getOriginalFilename());
-                System.out.println("Photo size: " + photoBytes.length + " bytes");
-                System.out.println("MIME type: " + photo.getContentType());
             }
 
             ActivityLog updated = activityLogService.update(existingLog);

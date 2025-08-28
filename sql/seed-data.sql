@@ -6,19 +6,13 @@ INSERT INTO User (userName, userPassword, email) VALUES
 ('diana', 'hashed_pass_4', 'diana@example.com'),
 ('eve', 'hashed_pass_5', 'eve@example.com');
 
-
 -- CATEGORIES
 INSERT INTO Category (categoryName) VALUES
-('Sightseeing'),
-('Food & Dining'),
 ('Adventure'),
-('Cultural'),
-('Entertainment'),
-('Shopping'),
-('Nature'),
-('Museums'),
-('Religious Sites'),
-('Photography');
+('Relaxation'),
+('Culture'),
+('Food'),
+('Nature');
 
 -- DESTINATIONS
 INSERT INTO Destination (userID, city, country, homeDeparture, destinationDeparture) VALUES
@@ -32,7 +26,6 @@ INSERT INTO Destination (userID, city, country, homeDeparture, destinationDepart
 (4, 'Berlin', 'Germany', NULL, NULL),
 (5, 'Cape Town', 'South Africa', '2025-12-01 15:00:00', '2025-12-15 20:00:00'),
 (5, 'Sydney', 'Australia', '2026-01-05 13:00:00', '2026-01-20 16:00:00');
-
 
 -- ACTIVITIES
 INSERT INTO Activity (destinationID, categoryID, title, activityDescription, website, isCompleted) VALUES
@@ -56,7 +49,6 @@ INSERT INTO Activity (destinationID, categoryID, title, activityDescription, web
 (9, 4, 'Wine Tasting', 'Tour local vineyards.', NULL, TRUE),
 (10, 5, 'Beach Day at Bondi', 'Swim and surf in Sydney.', NULL, TRUE),
 (10, 2, 'Sydney Opera House Tour', 'Iconic performance venue.', NULL, FALSE);
-
 
 -- ACTIVITY LOGS
 INSERT INTO ActivityLog (activityID, createdAt, notes, photoURL) VALUES

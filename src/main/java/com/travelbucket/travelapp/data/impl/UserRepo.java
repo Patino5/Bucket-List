@@ -2,8 +2,10 @@ package com.travelbucket.travelapp.data.impl;
 
 import com.travelbucket.travelapp.data.UserRepository;
 import com.travelbucket.travelapp.data.mappers.UserRowMapper;
+import com.travelbucket.travelapp.exception.InternalErrorException;
 import com.travelbucket.travelapp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -31,13 +33,21 @@ public class UserRepo implements UserRepository {
     @Override
     public User findById(int userID) {
         String sql = "SELECT * FROM User WHERE userID = ?;";
-        return jdbcTemplate.queryForObject(sql, userRowMapper, userID);
+        try {
+            return jdbcTemplate.queryForObject(sql, userRowMapper, userID);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public User findByUsernameAndPassword(String userName, String userPassword) {
         String sql = "SELECT * FROM User WHERE userName = ? AND userPassword = ?;";
-        return jdbcTemplate.queryForObject(sql, userRowMapper, userName, userPassword);
+        try {
+            return jdbcTemplate.queryForObject(sql, userRowMapper, userName, userPassword);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override

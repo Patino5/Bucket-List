@@ -15,11 +15,7 @@ import java.util.List;
 public class DestinationController {
 
     @Autowired
-    private final DestinationService destinationService;
-
-    public DestinationController(DestinationService destinationService) {
-        this.destinationService = destinationService;
-    }
+    private DestinationService destinationService;
 
     // GET /api/destinations
     @GetMapping()

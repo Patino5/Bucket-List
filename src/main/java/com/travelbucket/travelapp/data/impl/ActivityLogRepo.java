@@ -135,40 +135,4 @@ public class ActivityLogRepo implements ActivityLogRepository {
         return jdbcTemplate.update(sql, memoryID) > 0;
     }
 
-    // Helper method to update only notes (useful for partial updates)
-    public ActivityLog updateNotes(int memoryID, String notes) {
-        String sql = "UPDATE ActivityLog SET notes = ? WHERE memoryID = ?";
-        int rows = jdbcTemplate.update(sql, notes, memoryID);
-
-        if (rows > 0) {
-            return getById(memoryID);
-        }
-        return null;
-    }
-
-    // Helper method to update only photo data (useful for adding images to existing logs)
-    public ActivityLog updatePhoto(int memoryID, byte[] photo, String mimeType, String fileName) {
-        String sql = "UPDATE ActivityLog SET photo = ?, photoMimeType = ?, photoFileName = ? WHERE memoryID = ?";
-
-        int rows = jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql);
-
-            if (photo != null) {
-                ps.setBytes(1, photo);
-            } else {
-                ps.setNull(1, java.sql.Types.BLOB);
-            }
-
-            ps.setString(2, mimeType);
-            ps.setString(3, fileName);
-            ps.setInt(4, memoryID);
-
-            return ps;
-        });
-
-        if (rows > 0) {
-            return getById(memoryID);
-        }
-        return null;
-    }
 }

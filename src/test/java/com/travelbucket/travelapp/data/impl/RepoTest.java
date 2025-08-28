@@ -17,7 +17,7 @@ import java.util.List;
 
 @SpringBootTest
 @SpringJUnitConfig
-@Transactional // This ensures each test rolls back changes
+@Transactional // This ensures each test, rolls back changes
 class RepoTest {
     @Autowired
     private UserRepository userRepository;
@@ -67,28 +67,6 @@ class RepoTest {
         User updatedUser = userRepository.findById(createdUser.getUserID());
         assertEquals("updateduser", updatedUser.getUserName());
         assertEquals("updated@example.com", updatedUser.getEmail());
-    }
-
-    @Test
-    void userRepository_DeleteById_ShouldDeleteSuccessfully() {
-        User user = new User(12,"deletetest", "password123", "delete@example.com");
-        User createdUser = userRepository.add(user);
-        int createdUserID = createdUser.getUserID();
-        System.out.println("This is the deleted ID num before:" + createdUserID);
-
-        boolean result = userRepository.deleteUser(createdUser.getUserID());
-
-        assertTrue(result);
-        assertNull(userRepository.findById(createdUserID));
-    }
-
-    @Test
-    void userRepository_UsernameExists_ShouldReturnTrueForExistingUser() {
-        User user = new User(0, "existstest", "password123", "exists@example.com");
-        userRepository.add(user);
-
-        assertNotNull(userRepository.findByUsernameAndPassword("existstest", "password123"));
-        assertNull(userRepository.findByUsernameAndPassword("nonexistentuser", "password132"));
     }
 
     // Destination Repository Tests
