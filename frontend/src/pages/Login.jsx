@@ -3,50 +3,50 @@ import { useNavigate } from "react-router-dom";
 import { Plane, Map, Camera } from "lucide-react"; // icons
 
 const Login = () => {
-  const [userName, setUserName] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [email, setEmail] = useState(""); 
-  const [error, setError] = useState(null);
-  const [isRegister, setIsRegister] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const navigate = useNavigate();
+    const [userName, setUserName] = useState("");
+    const [userPassword, setUserPassword] = useState("");
+    const [email, setEmail] = useState("");
+    const [error, setError] = useState(null);
+    const [isRegister, setIsRegister] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
 
-    const endpoint = isRegister
-      ? "http://localhost:8080/api/users/register"
-      : "http://localhost:8080/api/users/login";
+        const endpoint = isRegister
+            ? "http://localhost:8080/api/users/register"
+            : "http://localhost:8080/api/users/login";
 
-    const body = isRegister ? { userName, userPassword, email } : { userName, userPassword };
+        const body = isRegister ? { userName, userPassword, email } : { userName, userPassword };
 
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+        try {
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
 
-      const contentType = res.headers.get("content-type");
-      if (!res.ok) {
-        if (contentType && contentType.includes("application/json")) {
-          const errData = await res.json();
-          throw new Error(errData.error || (isRegister ? "Registration failed" : "Login failed"));
-        } else {
-          throw new Error("Server error: non-JSON response");
+            const contentType = res.headers.get("content-type");
+            if (!res.ok) {
+                if (contentType && contentType.includes("application/json")) {
+                    const errData = await res.json();
+                    throw new Error(errData.error || (isRegister ? "Registration failed" : "Login failed"));
+                } else {
+                    throw new Error("Server error: non-JSON response");
+                }
+            }
+
+            const user = await res.json();
+            localStorage.setItem("userID", user.userID);
+            localStorage.setItem("userName", user.userName);
+
+            navigate("/layout/home");
+        } catch (err) {
+            setError(err.message);
         }
-      }
-
-      const user = await res.json();
-      localStorage.setItem("userID", user.userID);
-      localStorage.setItem("userName", user.userName);
-
-      navigate("/layout/home");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 flex items-center justify-center px-4">
@@ -97,7 +97,7 @@ const Login = () => {
                     {/* Call to Action */}
                     <div>
                         <p className="text-lg text-gray-700 mb-6">
-                            Start your next adventure today. Whether you're a dreamer or a traveler, 
+                            Start your next adventure today. Whether you're a dreamer or a traveler,
                             this app helps you turn plans into memories.
                         </p>
                         <button
@@ -121,6 +121,7 @@ const Login = () => {
                             value={userName}
                             onChange={(e) => setUserName(e.target.value)}
                             required
+                            autoFocus
                         />
                         {isRegister && (
                             <input
@@ -146,7 +147,9 @@ const Login = () => {
                         >
                             {isRegister ? "Sign Up" : "Login"}
                         </button>
-                        <button className="bg-neutral-600 text-white py-3 rounded-lg font-semibold hover:bg-neutral-700 transition mt-3" onClick={() => (setShowForm(false))}>Cancel</button>
+                        <button className="bg-neutral-600 text-white py-3 rounded-lg font-semibold hover:bg-neutral-700 transition mt-3" onClick={() => (setShowForm(false))}>
+                            Cancel
+                        </button>
                         {error && (
                             <p className="text-red-500 mt-3 text-sm text-center">{error}</p>
                         )}
