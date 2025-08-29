@@ -37,4 +37,8 @@ public class ActivityLogService {
     public boolean delete(int memoryID) {
         return repository.delete(memoryID);
     }
+
+    public List<ActivityLog> getUserLogs(int userID) {
+        return repository.getUserLogs(userID);
+    }
 }

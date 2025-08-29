@@ -16,7 +16,14 @@ public class ActivityLogRowMapper implements RowMapper<ActivityLog> {
         activityLog.setActivityID(rs.getInt("activityID"));
         activityLog.setCreatedAt(rs.getTimestamp("createdAt").toLocalDateTime());
         activityLog.setNotes(rs.getString("notes"));
-        activityLog.setPhotoURL(rs.getString("photoURL"));
+
+        // Handle BLOB image data
+        byte[] photoBytes = rs.getBytes("photo");
+        activityLog.setPhoto(photoBytes);
+
+        // Handle photo metadata
+        activityLog.setPhotoMimeType(rs.getString("photoMimeType"));
+        activityLog.setPhotoFileName(rs.getString("photoFileName"));
 
         return activityLog;
     }

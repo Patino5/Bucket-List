@@ -71,14 +71,14 @@ public class ActivityRepo implements ActivityRepository {
 
     @Override
     public Activity update(Activity activity) {
-        String sql = "UPDATE Activity SET destinationID = ?, categoryID = ?, title = ?, activityDescription = ?, website = ?, isCompleted =? WHERE activityID = ?;";
+        String sql = "UPDATE Activity SET categoryID = ?, title = ?, activityDescription = ?, website = ?, isCompleted =? WHERE activityID = ?;";
         int rows = jdbcTemplate.update(sql,
-                activity.getDestinationID(),
                 activity.getCategoryID(),
                 activity.getTitle(),
                 activity.getActivityDescription(),
                 activity.getWebsite(),
-                activity.isCompleted()
+                activity.isCompleted(),
+                activity.getActivityID()
                 );
         return rows > 0 ? activity : null;
     }
