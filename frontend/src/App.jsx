@@ -28,7 +28,7 @@ function App() {
           <Route path="/layout/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/layout/home/destination/:id" element={<ProtectedRoute><DestinationDetails destinations={destinations} setDestinations={setDestinations} /></ProtectedRoute>} />
           <Route path="/layout/home/destination/:id/add-activity" element={<ProtectedRoute><AddActivity /></ProtectedRoute>} />
-          <Route path="/layout/home/destination/:id/activity/:activityID/edit" element={<EditActivity />} />
+          <Route path="/layout/home/destination/:id/activity/:activityID/edit" element={<ProtectedRoute><EditActivity /></ProtectedRoute>} />
           <Route path="/layout/destinations" element={<ProtectedRoute><Destination /></ProtectedRoute>} />
           <Route path="/layout/activitylog" element={<ProtectedRoute><ActivityLog /></ProtectedRoute>} />
           <Route path="/layout/home/destination/:id/activity/:activityID/add-memory" element={<ProtectedRoute><AddActivityLog /></ProtectedRoute>} />

@@ -55,7 +55,7 @@ const Home = ({ destinations, setDestinations }) => {
     if (error) return <p className="text-red-500">{error}</p>;
 
     return (
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 ">
+        <div className="mx-auto px-6 lg:px-8 py-10 min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 ">
             <Header userName={userName} />
 
             {destinations.length > 0 ? (
